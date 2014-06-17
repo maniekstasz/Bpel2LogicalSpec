@@ -11,13 +11,13 @@ import java.util.Map;
  * 
  */
 public class ActivitySpecificationHolder {
-	private Map<String, SpecificationPattern> specificationsPatterns = new HashMap<String, SpecificationPattern>();
+	private static Map<String, SpecificationPattern> specificationsPatterns = new HashMap<String, SpecificationPattern>();
 
-	public void addPattern(SpecificationPattern pattern, String name) {
+	public static void addPattern(SpecificationPattern pattern, String name) {
 		specificationsPatterns.put(name, pattern);
 	}
 
-	public SpecificationPattern getPattern(String name) {
+	public static SpecificationPattern getPattern(String name) {
 		return specificationsPatterns.get(name);
 	}
 

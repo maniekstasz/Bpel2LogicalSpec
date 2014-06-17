@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class SpecificationPattern {
 
-	private static final String SPEC_LANG_CHARACTERS = "\u2228\u2227\u00AC\u21D2\u25C7\u25A1\\(\\) ,c";
+	private static final String SPEC_LANG_CHARACTERS = "\u2228\u2227\u00AC\u21D2\u25C7\u25A1\\(\\) ,cir";
 
 	private final List<PatternFragment> patternFragments;
 

@@ -1,7 +1,9 @@
 package deserializers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Node;
 
@@ -13,42 +15,25 @@ public class XmlDeserializer {
 		return processNode(node);
 	}
 
-	// public static List<Activity> getActivity(FromXmlParser xmlParser) throws
-	// JsonParseException, IOException{
-	// JsonToken t = xmlParser.nextToken();
-	// if(t != JsonToken.FIELD_NAME && t != JsonToken.START_OBJECT && t !=
-	// JsonToken.END_OBJECT)
-	// xmlParser.nextToken();
-	// String name = xmlParser.getCurrentName();
-	// boolean started = false;
-	// if(xmlParser.nextToken() == JsonToken.START_OBJECT){
-	// started = true;
-	// }
-	// XmlDeserializer xmlDeserializer =
-	// DeserializerFactory.getDeserializer(name);
-	// List<Activity> activities = xmlDeserializer.deserialize(xmlParser);
-	// if(started)
-	// xmlParser.nextToken();
-	// return activities;
-	// }
-
 	protected List<Activity> processNode(Node node) {
-		if (node.getNodeType() == Node.DOCUMENT_NODE && node.hasChildNodes()) {
-			List<Activity> activities = new ArrayList<Activity>();
+		List<Activity> activities = new ArrayList<Activity>();
+		if ((node.getNodeType() == Node.DOCUMENT_NODE || !DeserializerFactory.bpelWords.contains(node.getNodeName())) && node.hasChildNodes()) {
 			for (int i = 0; i < node.getChildNodes().getLength(); i++) {
 				List<Activity> toAdd = processNode(node.getChildNodes().item(i));
-				if(toAdd != null)
+				if (toAdd != null)
 					activities.addAll(toAdd);
 			}
 			return activities;
 		}
-//		System.out.println(node.getNodeName());
-//		System.out.println(node.getNodeType());
 		if (node.getNodeType() != Node.ELEMENT_NODE)
 			return null;
 		String nodeName = node.getNodeName();
+		if (!DeserializerFactory.bpelWords.contains(nodeName))
+			return activities;
 		XmlDeserializer deserializer = DeserializerFactory
 				.getDeserializer(nodeName);
 		return deserializer.deserialize(node);
 	}
+
+
 }

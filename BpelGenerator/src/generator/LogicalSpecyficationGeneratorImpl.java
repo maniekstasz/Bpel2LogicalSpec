@@ -3,6 +3,10 @@ package generator;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import deserializers.DeserializerContext;
+import deserializers.DeserializerFactory;
+import deserializers.DeserializerContext.MessageFlowPair;
+
 import parameters.ActivitySpecificationHolder;
 
 public class LogicalSpecyficationGeneratorImpl implements
@@ -22,21 +26,22 @@ public class LogicalSpecyficationGeneratorImpl implements
 		this.stream = new PrintStream(outputStream);
 	}
 
-	private void initGeneration() {
+	public void initGeneration() {
 		// stream.print(LOGICAL_SPECIFICATION_BEGINNING);
 		firstLineWritten = false;
 	}
 
-	private void finishGeneration() {
+	public void finishGeneration() {
 		// stream.print(LOGICAL_SPECIFICATION_ENDING);
 		// stream.print(result);
+		printMessageFlows();
 		stream.close();
 	}
 
 	public void generateLogicalSpecification(Activity activity) {
-		initGeneration();
+		// initGeneration();
 		activity.parseActivity(this);
-		finishGeneration();
+		// finishGeneration();
 	}
 
 	@Override
@@ -50,9 +55,26 @@ public class LogicalSpecyficationGeneratorImpl implements
 			if (!firstLineWritten) {
 				firstLineWritten = true;
 			} else {
-				stream.print(" ∧\n");
+				stream.print(" ∧\r\n");
 			}
-			stream.print(part);
+			stream.print("(" + part + ")");
+		}
+	}
+
+	private void printMessageFlows() {
+		DeserializerContext deserializerContext = DeserializerFactory
+				.getDesrializerContext();
+
+		SpecificationPattern specificationPattern = specificationPatternHolder
+				.getPattern("messageFlow");
+
+		for (MessageFlowPair pair : deserializerContext.getPairs()) {
+			String pairLetters[] = new String[] {
+					pair.invoke.activity.getActivities().get(0).getLetter(),
+					pair.receive.activity.getActivities().get(0).getLetter() };
+			stream.print(" ∧\r\n");
+			stream.print("("
+					+ specificationPattern.getSpecification(pairLetters) + ")");
 		}
 	}
 

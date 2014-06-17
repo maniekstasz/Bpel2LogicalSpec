@@ -1,7 +1,10 @@
 package deserializers;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.dataformat.xml.XmlAnnotationIntrospector.Pair;
 
 import deserializers.DeserializerContext.MessageFlowElem.MessageType;
 
@@ -10,6 +13,14 @@ import generator.Activity;
 public class DeserializerContext {
 
 	private Map<String, MessageFlowPair> messagesFlowPairs = new HashMap<String, MessageFlowPair>();
+
+	public void reset() {
+		messagesFlowPairs.clear();
+	}
+
+	public Collection<MessageFlowPair> getPairs() {
+		return messagesFlowPairs.values();
+	}
 
 	public void addMessageFlowElem(String link, Activity activity,
 			MessageType type) {

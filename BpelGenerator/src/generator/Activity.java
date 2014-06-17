@@ -1,13 +1,15 @@
 package generator;
 
+
 import java.util.List;
 
 public class Activity {
 
-	private List<Activity> activities;
+	protected List<Activity> activities;
 
-	private final String letter;
-	private final String activityName;
+	protected String letter;
+	
+	protected final String activityName;
 
 	public Activity(String letter) {
 		this.letter = letter;
@@ -56,5 +58,35 @@ public class Activity {
 		generator
 				.generateActivitySpecyfication(parametersLetters, activityName);
 	}
+	
+	
+	@Override
+	public String toString() {
+		String result = activityName + " ";
+		if(activities != null){
+			for(Activity act : activities){
+				result += act.toString() + " ";
+			}
+		}else{
+			result += letter + " ";
+		}
+		return result;
+	}
+
+	public String getLetter() {
+		return letter;
+	}
+
+	public void setLetter(String letter) {
+		this.letter = letter;
+	}
+
+	public List<Activity> getActivities() {
+		return activities;
+	}
+
+//	public void setActivities(List<Activity> activities) {
+//		this.activities = activities;
+//	}
 
 }

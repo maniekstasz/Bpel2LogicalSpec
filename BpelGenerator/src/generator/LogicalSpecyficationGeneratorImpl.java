@@ -9,10 +9,10 @@ public class LogicalSpecyficationGeneratorImpl implements
 		LogicalSpecyficationGenerator {
 
 	private final static String DISJUNCTION_SIGN = " \u2228 ";
-	private final static String LOGICAL_SPECIFICATION_BEGINNING = "L={";
-	private final static String LOGICAL_SPECIFICATION_ENDING = "}";
+	// private final static String LOGICAL_SPECIFICATION_BEGINNING = "L={";
+	// private final static String LOGICAL_SPECIFICATION_ENDING = "}";
 	private final ActivitySpecificationHolder specificationPatternHolder;
-
+	private boolean firstLineWritten = false;
 	private final PrintStream stream;
 
 	public LogicalSpecyficationGeneratorImpl(
@@ -23,11 +23,13 @@ public class LogicalSpecyficationGeneratorImpl implements
 	}
 
 	private void initGeneration() {
-		stream.print(LOGICAL_SPECIFICATION_BEGINNING);
+		// stream.print(LOGICAL_SPECIFICATION_BEGINNING);
+		firstLineWritten = false;
 	}
 
 	private void finishGeneration() {
-		stream.print(LOGICAL_SPECIFICATION_ENDING);
+		// stream.print(LOGICAL_SPECIFICATION_ENDING);
+		// stream.print(result);
 		stream.close();
 	}
 
@@ -42,8 +44,16 @@ public class LogicalSpecyficationGeneratorImpl implements
 			String activityName) {
 		SpecificationPattern specificationPattern = specificationPatternHolder
 				.getPattern(activityName);
-		stream.print(specificationPattern.getSpecification(parametersLetters));
-		stream.print(",");
+		String spec = specificationPattern.getSpecification(parametersLetters);
+		String[] parts = spec.split(",");
+		for (String part : parts) {
+			if (!firstLineWritten) {
+				firstLineWritten = true;
+			} else {
+				stream.print(" ∧\n");
+			}
+			stream.print(part);
+		}
 	}
 
 	@Override

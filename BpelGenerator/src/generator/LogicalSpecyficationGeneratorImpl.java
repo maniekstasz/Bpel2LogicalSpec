@@ -2,6 +2,7 @@ package generator;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 import deserializers.DeserializerContext;
 import deserializers.DeserializerFactory;
@@ -23,7 +24,11 @@ public class LogicalSpecyficationGeneratorImpl implements
 			ActivitySpecificationHolder specificationHolder,
 			OutputStream outputStream) {
 		this.specificationPatternHolder = specificationHolder;
-		this.stream = new PrintStream(outputStream);
+		try {
+			this.stream = new PrintStream(outputStream, false, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException();
+		}
 	}
 
 	public void initGeneration() {
